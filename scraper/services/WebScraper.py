@@ -1,12 +1,10 @@
 from bs4 import BeautifulSoup
 import requests
-import time
-import datetime
 
 
 def scrap_website(url, path):
     soup = __get_html_content_as_soup(url)
-    __extract_data(soup, path)
+    return __extract_data(soup, path)
 
 def __get_html_content_as_soup(url):
     response = requests.get(url)
