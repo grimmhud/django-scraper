@@ -20,10 +20,10 @@
             </div>
 
             <div>
-                <label for="xpath-input" class="form-label">XPath</label>
-                <input type="text" id="xpath-input" class="form-control" aria-describedby="xpath-input-helper">
-                <div id="xpath-input-helper" class="form-text">
-                    Write the full XPath to extract the data.
+                <label for="path-input" class="form-label">Path</label>
+                <input type="text" id="path-input" class="form-control" aria-describedby="path-input-helper">
+                <div id="path-input-helper" class="form-text">
+                    Write the full Path to extract the data.
                 </div>
             </div>
             {% csrf_token %}
@@ -38,13 +38,13 @@
 
     function sendToExtraction(){
             var website = document.getElementById("website-input").value;
-            var xpath = document.getElementById("xpath-input").value;
+            var path = document.getElementById("path-input").value;
             var csrftoken = getCookie('csrftoken');
 
             fetch("http://localhost:8000/", {
             method: "POST",
             headers: {'Content-Type': 'application/json', 'X-CSRFToken': csrftoken}, 
-            body: JSON.stringify({filter: xpath, website })
+            body: JSON.stringify({path, website })
             }).then(res => {
             console.log("Request complete! response:", res);
             });

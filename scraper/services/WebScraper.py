@@ -4,32 +4,20 @@ import time
 import datetime
 
 
-def extract_data():
-    soup = get_html_content_as_soup()
-    find_jobs(soup)
+def scrap_website(url, path):
+    soup = __get_html_content_as_soup(url)
+    __extract_data(soup, path)
 
-def get_html_content_as_soup():
-    html_text = requests.get('https://www.timesjobs.com/candidate/job-search.html?searchType=personalizedSearch&from=submit&txtKeywords=python&txtLocation=')
-    return BeautifulSoup(html_text.text, 'lxml')
-
-def save_job(file, company_name, skills, more_info):
-
-    file.write(f'Company Name: {company_name}\n')
-    file.write(f'Requirements Skills: {skills}\n')
-    file.write(f'More info: {more_info}\n')
-    file.write('\n')
+def __get_html_content_as_soup(url):
+    response = requests.get(url)
+    return BeautifulSoup(response.text, 'lxml')
     
-def find_jobs(soup):
-    jobs = soup.find_all('li', class_='clearfix job-bx wht-shd-bx')
-    now = datetime.datetime.now()
-    with open(f'/Users/hudson.oliveira/Documents/Projects/personal/scraper-history/jobs-{now}', 'w') as file:
-        for job in jobs:
-            skills = job.find('span', class_='srp-skills').text.strip().replace('  ,  ', ', ')
-            
-            posted_date = job.find('span', class_='sim-posted').text.strip()
-            if 'few days' not in posted_date:
-                continue
+    
+def __extract_data(soup, path):
+    selected_content = soup.select(path)
 
-            company_name = job.find('h3', class_='joblist-comp-name').text.replace('(More Jobs)', '').strip()
-            more_info = job.header.h2.a['href']
-            save_job(file, company_name, skills, more_info)
+    data = []
+    for content in selected_content:
+        data.append(content.text.strip())
+
+    return data
