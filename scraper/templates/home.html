@@ -32,21 +32,73 @@
         </form>
     </div>
     {% if extracted_data %}
-    <div>Data Extracted</div>
-    <table class="table table-striped">
-        <tbody>
-            {% for item in extracted_data %}
-            <tr>
-                <th scope="row">{{ forloop.counter }}</th>
-                <td>{{ item }}</td>
-            </tr>
-            {% endfor %}
-        </tbody>
-    </table>
+    <br />
+    <br />
+    <br />
+    <div class="container">
+        <p class="h4">Data Extracted</p>
+        <div>
+            <select id="select-export-file" name="file_type" class="form-select form-select-sm"
+                aria-label=".form-select-sm example">
+                <option selected>Choose a file type to export</option>
+                <option value="1">csv</option>
+            </select>
+            <br/>
+            <button id="button-export-file" type="button" class="btn btn-primary btn-sm" onclick="sendToExport()">Export</button>
+        </div>
+        <br />
+        <div>
+            <table class="table table-striped">
+                <tbody>
+                    {% for item in extracted_data %}
+                    <tr>
+                        <th scope="row">{{ forloop.counter }}</th>
+                        <td>{{ item }}</td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
     {% endif %}
+    <script>
+        function sendToExport() {
+            let element = document.getElementById('select-export-file');
+            let export_type = element.options[element.selectedIndex].value;
+            let extracted_data = "{{ extracted_data|safe }}";
+
+            fetch('/export', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json; charset=UTF-8', 'X-CSRFToken': '{{ csrf_token }}' },
+                body: JSON.stringify({ export_type, extracted_data })
+            }).then(res => res.blob())
+            .then(blob => downloadBlob(blob, 'download.csv'))
+                .catch(err => console.log);
+        }
+
+        function downloadBlob(blob, fileName) {
+            const url = URL.createObjectURL(blob);
+            
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = fileName;
+         
+            const clickHandler = () => {
+                setTimeout(() => {
+                URL.revokeObjectURL(url);
+                this.removeEventListener('click', clickHandler);
+                }, 150);
+            };
+
+            a.addEventListener('click', clickHandler, false);
+            a.click();
+            return a;
+        }
+    </script>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"
         integrity="sha384-ka7Sk0Gln4gmtz2MlQnikT1wXgYsOg+OMhuP+IlRH9sENBO0LRn5q+8nbTov4+1p"
         crossorigin="anonymous"></script>
+
 </body>
 
 </html>
