@@ -1,6 +1,8 @@
 from bs4 import BeautifulSoup
 import requests
 
+from .DataManager import clean_data
+
 
 def scrap_website(url, path):
     soup = __get_html_content_as_soup(url)
@@ -18,4 +20,4 @@ def __extract_data(soup, path):
     for content in selected_content:
         data.append(content.text.strip())
 
-    return data
+    return clean_data(data)

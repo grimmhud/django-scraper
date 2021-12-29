@@ -72,7 +72,7 @@
                 headers: { 'Content-Type': 'application/json; charset=UTF-8', 'X-CSRFToken': '{{ csrf_token }}' },
                 body: JSON.stringify({ export_type, extracted_data })
             }).then(res => res.blob())
-            .then(blob => downloadBlob(blob, 'download.csv'))
+            .then(blob => downloadBlob(blob, `web-scraping-${Date.now()}.csv`))
                 .catch(err => console.log);
         }
 

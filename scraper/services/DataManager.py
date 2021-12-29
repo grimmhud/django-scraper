@@ -1,5 +1,10 @@
 import ast
 
-def clean_array_to_export(data):
-    if '\r' in data and '\\r' not in data:
-        return ast.literal_eval(data.replace('\r','\\r').replace('\n','\\n'))
+def clean_data(data):
+    data_str = str(data)
+    if '\\n' in data_str or '\\r' in data_str:
+        data_str = data_str.replace('\\r','').replace('\\n','')
+    if '\n' in data_str or '\r' in data_str:
+        data_str =  data_str.replace('\r','').replace('\n','')
+
+    return ast.literal_eval(data_str)

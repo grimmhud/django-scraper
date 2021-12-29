@@ -1,10 +1,9 @@
 from django.shortcuts import  render
 from django.http import HttpResponseNotFound, FileResponse
 import json
-
+import ast
 from .services.FileConverter import to_csv
 from .services.WebScraper import scrap_website
-from .services.DataManager import clean_array_to_export
 
 
 def home_view(request):
@@ -23,7 +22,7 @@ def export_data(request):
     if request.method == 'POST':
         body = json.loads(request.body.decode('utf-8'))
         export_type = body['export_type']
-        extracted_data = clean_array_to_export(body['extracted_data'])
+        extracted_data = ast.literal_eval(body['extracted_data'])
 
         if export_type == '1':
             try:

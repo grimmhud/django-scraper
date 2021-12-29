@@ -131,3 +131,6 @@ GitHub.sublime-settings
 # Visual Studio Code # 
 .vscode/*
 .history
+
+# Custom
+scraper-history/
