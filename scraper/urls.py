@@ -15,10 +15,10 @@ Including another URLconf
 """
 from django.contrib import admin
 from django.urls import path
-from .views import home_view, export_data
+from .views import HomeView, export_data
 
 urlpatterns = [
     path('admin/', admin.site.urls),
-    path('', home_view, name="home"),
+    path('', HomeView.as_view(), name="home"),
     path('export', export_data, name="export"),
 ]
