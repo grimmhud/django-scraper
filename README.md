@@ -6,7 +6,8 @@ Django-Scraper was created for web scraping via Django interface, used to extrac
 It is in development, not ready to use.
 
 ## Features
-- Extract data via CSS selector [WIP].
+- Extract data via CSS selector
+- Export data as CSV
 
 ## Contributing
 Pull requests are welcome. For major changes, please open an issue first to discuss what you would like to change.
