@@ -1,7 +1,9 @@
 # Django-Scraper
 ## Overview
-
 Django-Scraper was created for web scraping via Django interface, used to extract structured data from web pages.
+
+![Example](doc/example.gif?raw=true "Django-Scraper Example")
+
 ## Project Status
 It is in development, not ready to use.
 
