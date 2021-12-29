@@ -10,7 +10,7 @@
     <title>Scraper</title>
 </head>
 
-<body>
+<body style="background-color: #F3F3F3;">
     <div class="container" style="margin-top: 30px;">
         <h3>Web Scraping</h3>
         <form action="/" method="POST">
@@ -29,7 +29,7 @@
                     <input name="path" type="text" id="path-input" class="form-control"
                         aria-describedby="path-input-helper">
                     <div id="path-input-helper" class="form-text">
-                        Write the full Path to extract the data.
+                        Write CSS selector path to extract the data.
                     </div>
                 </div>
             </div>
@@ -52,6 +52,12 @@
         </div>
         <div style="margin-top: 20px;">
             <table class="table table-striped">
+                <thead>
+                    <tr>
+                        <th scope="col">#</th>
+                        <th scope="col">Value</th>
+                    </tr>
+                </thead>
                 <tbody>
                     {% for item in extracted_data %}
                     <tr>

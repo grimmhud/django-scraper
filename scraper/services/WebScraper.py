@@ -1,7 +1,6 @@
 from bs4 import BeautifulSoup
 import requests
-
-from .DataManager import clean_data
+import ast
 
 
 def scrap_website(url, path):
@@ -20,4 +19,13 @@ def __extract_data(soup, path):
     for content in selected_content:
         data.append(content.text.strip())
 
-    return clean_data(data)
+    return __clean_data(data)
+
+def __clean_data(data):
+    data_str = str(data)
+    if '\\n' in data_str or '\\r' in data_str:
+        data_str = data_str.replace('\\r','').replace('\\n','')
+    if '\n' in data_str or '\r' in data_str:
+        data_str =  data_str.replace('\r','').replace('\n','')
+
+    return ast.literal_eval(data_str)
