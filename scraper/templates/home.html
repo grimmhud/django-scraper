@@ -11,43 +11,46 @@
 </head>
 
 <body>
-    <div class="container">
+    <div class="container" style="margin-top: 30px;">
         <h3>Web Scraping</h3>
         <form action="/" method="POST">
-            <div>
-                <label for="website-input" class="form-label">Website URL</label>
-                <input name="website" type="text" id="website-input" class="form-control">
-            </div>
+            <div style="margin-top: 20px;">
+                <div>
+                    <label for="website-input" class="form-label">Website URL:</label>
+                    <input name="website" type="text" id="website-input" class="form-control"
+                        aria-describedby="website-input-helper">
+                    <div id="path-input-helper" class="form-text">
+                        Write the exact website url.
+                    </div>
+                </div>
 
-            <div>
-                <label for="path-input" class="form-label">Path</label>
-                <input name="path" type="text" id="path-input" class="form-control"
-                    aria-describedby="path-input-helper">
-                <div id="path-input-helper" class="form-text">
-                    Write the full Path to extract the data.
+                <div>
+                    <label for="path-input" class="form-label">Path:</label>
+                    <input name="path" type="text" id="path-input" class="form-control"
+                        aria-describedby="path-input-helper">
+                    <div id="path-input-helper" class="form-text">
+                        Write the full Path to extract the data.
+                    </div>
                 </div>
             </div>
             {% csrf_token %}
-            <input id="scraping-submit" type="submit" class="btn btn-primary" value="Extract" />
+            <input id="scraping-submit" type="submit" class="btn btn-primary" value="Extract"
+                style="margin-top: 5px;" />
         </form>
     </div>
     {% if extracted_data %}
-    <br />
-    <br />
-    <br />
-    <div class="container">
-        <p class="h4">Data Extracted</p>
+    <div class="container" style="margin-top: 40px;">
+        <p class="h4">Extracted Data</p>
         <div>
             <select id="select-export-file" name="file_type" class="form-select form-select-sm"
                 aria-label=".form-select-sm example">
                 <option selected>Choose a file type to export</option>
                 <option value="1">csv</option>
             </select>
-            <br/>
-            <button id="button-export-file" type="button" class="btn btn-primary btn-sm" onclick="sendToExport()">Export</button>
+            <button id="button-export-file" type="button" class="btn btn-primary btn-sm" onclick="sendToExport()"
+                style="margin-top: 10px;">Export</button>
         </div>
-        <br />
-        <div>
+        <div style="margin-top: 20px;">
             <table class="table table-striped">
                 <tbody>
                     {% for item in extracted_data %}
@@ -72,21 +75,21 @@
                 headers: { 'Content-Type': 'application/json; charset=UTF-8', 'X-CSRFToken': '{{ csrf_token }}' },
                 body: JSON.stringify({ export_type, extracted_data })
             }).then(res => res.blob())
-            .then(blob => downloadBlob(blob, `web-scraping-${Date.now()}.csv`))
+                .then(blob => downloadBlob(blob, `web-scraping-${Date.now()}.csv`))
                 .catch(err => console.log);
         }
 
         function downloadBlob(blob, fileName) {
             const url = URL.createObjectURL(blob);
-            
+
             const a = document.createElement('a');
             a.href = url;
             a.download = fileName;
-         
+
             const clickHandler = () => {
                 setTimeout(() => {
-                URL.revokeObjectURL(url);
-                this.removeEventListener('click', clickHandler);
+                    URL.revokeObjectURL(url);
+                    this.removeEventListener('click', clickHandler);
                 }, 150);
             };
 
