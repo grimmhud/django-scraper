@@ -6,14 +6,8 @@ from ..models import ScrapingSearch, ScrapingResult
 
 def scrap_website(url, path):
     soup = __get_html_content_as_soup(url)
-    data =  __extract_data(soup, path)
-    
-    result_model = ScrapingResult.create(data)
-    result_model.save()
-    search_model = ScrapingSearch.create(url, path, result_model)
-    search_model.save()
-    
-    return data
+    data =  __extract_data(soup, path)    
+    return __save_and_get_result_model(url, path, data)
 
 def __get_html_content_as_soup(url):
     response = requests.get(url)
@@ -37,3 +31,11 @@ def __clean_data(data):
         data_str =  data_str.replace('\r','').replace('\n','')
 
     return ast.literal_eval(data_str)
+
+
+def __save_and_get_result_model(url, path, data):
+    result_model = ScrapingResult.create(data)
+    result_model.save()
+    search_model = ScrapingSearch.create(url, path, result_model)
+    search_model.save()
+    return result_model
