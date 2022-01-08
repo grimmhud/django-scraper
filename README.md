@@ -10,6 +10,8 @@ It is in development, not ready to use.
 ## Features
 - Extract data via CSS selector
 - Export data as CSV
+- See History in Django-Admin
+- Download Previews scraping in Django-Admin
 
 ## Contributing
 Pull requests are welcome. For major changes, please open an issue first to discuss what you would like to change.

@@ -25,7 +25,6 @@ def export_data(request):
         export_type = request.GET.get('export_type')
         scraping_result_id = request.GET.get('scraping_result_id')
         
-
         result_model = ScrapingResult.objects.get(id=scraping_result_id)
 
         response = HttpResponse(
@@ -33,8 +32,6 @@ def export_data(request):
             headers={'Content-Disposition': 'attachment; filename="somefilename.csv"'},
         )
         if export_type == '1':
-            try:
-                to_csv(response, result_model.values)
-            except IOError:
-                    response = HttpResponseNotFound()       
+            to_csv(response, result_model.values)
             return response
+        return HttpResponseNotFound()
