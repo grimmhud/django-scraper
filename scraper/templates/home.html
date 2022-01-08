@@ -91,21 +91,25 @@
     </div>
     {% endif %}
     <script>
-        function sendToExport() {
+        async function sendToExport() {
             let element = document.getElementById('select-export-file');
             let export_type = element.options[element.selectedIndex].value;
             let scraping_result_id = "{{ scraping_result.id|safe }}";
 
-            fetch('/export', {
-                method: 'POST',
-                headers: { 'Content-Type': 'application/json; charset=UTF-8', 'X-CSRFToken': '{{ csrf_token }}' },
-                body: JSON.stringify({ export_type, scraping_result_id })
-            }).then(res => res.blob())
-            .then(blob => downloadBlob(blob, `django-scraper-${Date.now()}.csv`))
-                .catch(err => console.log);
+            try {
+                let response = await fetch(`/export?export_type=${export_type}&scraping_result_id=${scraping_result_id}`, {
+                method: 'GET',
+                headers: { 'Content-Type': 'application/json; charset=UTF-8', 'X-CSRFToken': '{{ csrf_token }}' }
+            })
+            var blob = await response.blob()
+            downloadBlob(blob, `django-scraper-${new Date().toUTCString()}.csv`);
+            } catch (err) {
+                console.error(err);
+            }
+
         }
 
-        async function downloadBlob(blob, fileName) {
+        function downloadBlob(blob, fileName) {
             const url = URL.createObjectURL(blob);
 
             const a = document.createElement('a');

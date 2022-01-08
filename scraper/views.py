@@ -21,11 +21,10 @@ class HomeView(TemplateView):
 
 
 def export_data(request):
-    if request.method == 'POST':
-        body = json.loads(request.body.decode('utf-8'))
+    if request.method == 'GET':     
+        export_type = request.GET.get('export_type')
+        scraping_result_id = request.GET.get('scraping_result_id')
         
-        export_type = body['export_type']
-        scraping_result_id = body['scraping_result_id']
 
         result_model = ScrapingResult.objects.get(id=scraping_result_id)
 
