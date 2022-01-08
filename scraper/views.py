@@ -1,5 +1,5 @@
 from django.shortcuts import  render
-from django.http import HttpResponseNotFound, FileResponse
+from django.http import HttpResponseNotFound, FileResponse, HttpResponse
 from django.views.generic import TemplateView
 import json
 from .models import ScrapingResult
@@ -14,8 +14,8 @@ class HomeView(TemplateView):
         
     def post(self, request):
         context = {}
-        extracted_data = scrap_website(request.POST['website'], request.POST['path'])
-        context['scraping_result'] = extracted_data
+        scraping_result = scrap_website(request.POST['website'], request.POST['path'])
+        context['scraping_result'] = scraping_result
 
         return render(request, self.template_name, context)
 
@@ -23,13 +23,19 @@ class HomeView(TemplateView):
 def export_data(request):
     if request.method == 'POST':
         body = json.loads(request.body.decode('utf-8'))
+        
         export_type = body['export_type']
         scraping_result_id = body['scraping_result_id']
+
         result_model = ScrapingResult.objects.get(id=scraping_result_id)
+
+        response = HttpResponse(
+            content_type='text/csv',
+            headers={'Content-Disposition': 'attachment; filename="somefilename.csv"'},
+        )
         if export_type == '1':
             try:
-                file_path = to_csv(result_model.csv_values)
-                response = FileResponse(open(file_path, 'rb'))
+                to_csv(response, result_model.values)
             except IOError:
                     response = HttpResponseNotFound()       
             return response

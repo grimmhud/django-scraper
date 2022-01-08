@@ -4,18 +4,18 @@ import ast
 from ..models import ScrapingSearch, ScrapingResult
 
 
-def scrap_website(url, path):
+def scrap_website(url, filter):
     soup = __get_html_content_as_soup(url)
-    data =  __extract_data(soup, path)    
-    return __save_and_get_result_model(url, path, data)
+    data =  __extract_data(soup, filter)    
+    return __save_and_get_scraping_result(url, filter, data)
 
 def __get_html_content_as_soup(url):
     response = requests.get(url)
     return BeautifulSoup(response.text, 'lxml')
     
     
-def __extract_data(soup, path):
-    selected_content = soup.select(path)
+def __extract_data(soup, filter):
+    selected_content = soup.select(filter)
 
     data = []
     for content in selected_content:
@@ -33,9 +33,9 @@ def __clean_data(data):
     return ast.literal_eval(data_str)
 
 
-def __save_and_get_result_model(url, path, data):
-    result_model = ScrapingResult.create(data)
-    result_model.save()
-    search_model = ScrapingSearch.create(url, path, result_model)
-    search_model.save()
-    return result_model
+def __save_and_get_scraping_result(url, filter, data):
+    result = ScrapingResult.create(data)
+    result.save()
+    search = ScrapingSearch.create(url, filter, result)
+    search.save()
+    return result

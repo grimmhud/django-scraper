@@ -79,7 +79,7 @@
                     </tr>
                 </thead>
                 <tbody>
-                    {% for item in scraping_result.csv_values %}
+                    {% for item in scraping_result.values %}
                     <tr>
                         <th scope="row">{{ forloop.counter }}</th>
                         <td>{{ item }}</td>
@@ -101,11 +101,11 @@
                 headers: { 'Content-Type': 'application/json; charset=UTF-8', 'X-CSRFToken': '{{ csrf_token }}' },
                 body: JSON.stringify({ export_type, scraping_result_id })
             }).then(res => res.blob())
-                .then(blob => downloadBlob(blob, `django-scraper-${Date.now()}.csv`))
+            .then(blob => downloadBlob(blob, `django-scraper-${Date.now()}.csv`))
                 .catch(err => console.log);
         }
 
-        function downloadBlob(blob, fileName) {
+        async function downloadBlob(blob, fileName) {
             const url = URL.createObjectURL(blob);
 
             const a = document.createElement('a');
