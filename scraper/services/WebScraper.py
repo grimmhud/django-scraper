@@ -1,11 +1,19 @@
 from bs4 import BeautifulSoup
 import requests
 import ast
+from ..models import ScrapingSearch, ScrapingResult
 
 
 def scrap_website(url, path):
     soup = __get_html_content_as_soup(url)
-    return __extract_data(soup, path)
+    data =  __extract_data(soup, path)
+    
+    result_model = ScrapingResult.create(data)
+    result_model.save()
+    search_model = ScrapingSearch.create(url, path, result_model)
+    search_model.save()
+    
+    return data
 
 def __get_html_content_as_soup(url):
     response = requests.get(url)
