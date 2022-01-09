@@ -20,7 +20,7 @@ class HomeViewTestCase(TestCase):
         request = self.factory.post('/')
         request.POST._mutable = True
         request.POST.appendlist('website','https://google.com')
-        request.POST.appendlist('path','html > body')
+        request.POST.appendlist('filter','html > body')
 
         response = self.home_view.post(request)
 
