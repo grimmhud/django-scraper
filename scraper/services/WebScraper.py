@@ -1,13 +1,11 @@
 from bs4 import BeautifulSoup
 import requests
 import ast
-from ..models import ScrapingSearch, ScrapingResult
 
 
 def scrap_website(url, filter):
     soup = __get_html_content_as_soup(url)
-    data =  __extract_data(soup, filter)    
-    return __save_and_get_scraping_result(url, filter, data)
+    return  __extract_data(soup, filter)    
 
 def __get_html_content_as_soup(url):
     response = requests.get(url)
@@ -31,11 +29,3 @@ def __clean_data(data):
         data_str =  data_str.replace('\r','').replace('\n','')
 
     return ast.literal_eval(data_str)
-
-
-def __save_and_get_scraping_result(url, filter, data):
-    result = ScrapingResult.create(data)
-    result.save()
-    search = ScrapingSearch.create(url, filter, result)
-    search.save()
-    return result

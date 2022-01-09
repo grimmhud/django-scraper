@@ -1,10 +1,7 @@
-from django.shortcuts import  render
-from django.http import HttpResponseNotFound, FileResponse, HttpResponse
+from django.shortcuts import render
 from django.views.generic import TemplateView
-import json
-from .models import ScrapingResult
-from .services.FileConverter import to_csv
 from .services.WebScraper import scrap_website
+from .services.ViewServices import HomeViewService, ExportDataViewService
 
 class HomeView(TemplateView):
     template_name = 'home.html'
@@ -13,25 +10,8 @@ class HomeView(TemplateView):
         return render(request, self.template_name, {})
         
     def post(self, request):
-        context = {}
-        scraping_result = scrap_website(request.POST['website'], request.POST['path'])
-        context['scraping_result'] = scraping_result
-
-        return render(request, self.template_name, context)
-
+        return HomeViewService.post(request, self.template_name)
 
 def export_data(request):
-    if request.method == 'GET':     
-        export_type = request.GET.get('export_type')
-        scraping_result_id = request.GET.get('scraping_result_id')
-        
-        result_model = ScrapingResult.objects.get(id=scraping_result_id)
-
-        response = HttpResponse(
-            content_type='text/csv',
-            headers={'Content-Disposition': 'attachment; filename="somefilename.csv"'},
-        )
-        if export_type == '1':
-            to_csv(response, result_model.values)
-            return response
-        return HttpResponseNotFound()
+    if request.method == 'GET':  
+        return ExportDataViewService.get(request)   
