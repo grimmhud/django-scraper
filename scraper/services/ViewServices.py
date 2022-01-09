@@ -1,6 +1,5 @@
 from django.shortcuts import render
 from django.http import HttpResponseNotFound, HttpResponse, HttpResponseServerError
-
 from .WebScraper import scrap_website
 from ..models import ScrapingSearch, ScrapingResult
 from .FileConverter import to_csv
@@ -11,15 +10,17 @@ class HomeViewService:
         try:
             context = {}
             website = request.POST['website']
-            filter = request.POST['path']
+            filter = request.POST['filter']
             
-            data = scrap_website(request.POST['website'], request.POST['path'])
+            data = scrap_website(website, filter)
             scraping_result = cls.__save_and_get_scraping_result(website, filter, data)
             
             context['scraping_result'] = scraping_result
             return render(request, template_name, context)
-        except:
-            return HttpResponseServerError()
+        except Exception as e:
+            msg = str(e)
+            print(msg)
+            return HttpResponseServerError(msg)
     
     def __save_and_get_scraping_result(url, filter, data):
         result = ScrapingResult.create(data)
@@ -46,5 +47,7 @@ class ExportDataViewService:
                 to_csv(response, result_model.values)
                 return response
             return HttpResponseNotFound()
-        except:
-            return HttpResponseServerError()
+        except Exception as e:
+            msg = str(e)
+            print(msg)
+            return HttpResponseServerError(msg)

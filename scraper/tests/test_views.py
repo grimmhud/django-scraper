@@ -3,7 +3,6 @@ from django.utils import timezone
 from scraper.models import ScrapingResult
 from ..views import HomeView, export_data
 from django.test.client import RequestFactory
-import json
 
 
 class HomeViewTestCase(TestCase):
