@@ -3,17 +3,17 @@ import requests
 import ast
 
 
-def scrap_website(url, path):
+def scrap_website(url, filter):
     soup = __get_html_content_as_soup(url)
-    return __extract_data(soup, path)
+    return  __extract_data(soup, filter)    
 
 def __get_html_content_as_soup(url):
     response = requests.get(url)
     return BeautifulSoup(response.text, 'lxml')
     
     
-def __extract_data(soup, path):
-    selected_content = soup.select(path)
+def __extract_data(soup, filter):
+    selected_content = soup.select(filter)
 
     data = []
     for content in selected_content:
