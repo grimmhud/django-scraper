@@ -2,7 +2,7 @@ from django.shortcuts import render
 from django.http import HttpResponseNotFound, HttpResponse, HttpResponseServerError
 from .WebScraper import scrap_website
 from ..models import ScrapingSearch, ScrapingResult
-from .FileConverter import to_csv
+from .FileConverter import create_csv_with_stream
 
 class HomeViewService:
     @classmethod
@@ -44,7 +44,7 @@ class ExportDataViewService:
                 headers={'Content-Disposition': 'attachment;'},
             )
             if export_type == cls.csv_type:
-                to_csv(response, result_model.values)
+                create_csv_with_stream(response, result_model.values)
                 return response
             return HttpResponseNotFound()
         except Exception as e:
