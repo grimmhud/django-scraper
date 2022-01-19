@@ -1,6 +1,6 @@
 import csv
 from io import StringIO
-import zipfile
+from zipfile import ZipFile
 
 def create_csv_with_stream(stream, data):  
     writer = csv.writer(stream)
@@ -17,7 +17,7 @@ def create_csv(data):
 
 
 def zipFiles(stream, files):
-    with zipfile.ZipFile(stream, 'w') as zf:
+    with ZipFile(stream, 'w') as zf:
         for f in files:
-            zf.writestr("{}.csv".format(f['filename']), f['file'].getvalue())
+            zf.writestr(f['filename'], f['file'].getvalue())
     return stream.getvalue()
