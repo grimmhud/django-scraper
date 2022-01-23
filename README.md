@@ -6,9 +6,9 @@ Django-Scraper was created for web scraping via Django interface, used to extrac
 ![Example](doc/scraping-example.gif?raw=true "Django-Scraper Example")
 
 ### Django-Admin Example
-![Admin Example](doc/admin-example.gif?raw=true "Admin  Example")
+![Admin Example](doc/admin-example.gif?raw=true "Admin Example")
 ## Project Status
-MVP is ready, but it is in development yet.
+- Simple GET (Only a requests.get): MVP is ready, but it is in development yet.
 
 ## Features
 - Extract data via CSS selector
